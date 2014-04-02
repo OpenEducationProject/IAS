@@ -1,0 +1,29 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li><a href="{{ url_for('show_assessments') }}">Assessments</a></li>
+        <li>Take assessment: Some Assessment</li>
+        <li class="active">Question</li>
+    </ul>
+    <big>{{ q.text }}</big><br />
+    <form action="#" method="POST">
+        {% if q.type[0] == 1 %}
+            {% for idx, i in enumerate(q["answer_choices"]) %}
+                <input type="radio" name="answer-{{ q.qid }}" id="q-{{ q.qid }}-{{ idx }}" />
+                <label for="q-{{ q.qid }}-{{ idx }}" style="font-weight:300;width:90%;">{{ i }}</label>
+                <br />
+            {% endfor %}
+        {% endif %}
+    </form>
+    <div class="row">
+        <div class="col-sm-1">
+            <a href="#" class="btn btn-primary">&lt; Previous</a>
+        </div>
+        <div class="col-sm-10" style="text-align:center;">
+            <span style="text-align:center;width:100%;color:gray;">5 answered, 26 remaining</span>
+        </div>
+        <div class="col-sm-1">
+            <a href="#" class="btn btn-primary">Next &gt;</a>
+        </div>
+{% endblock %}

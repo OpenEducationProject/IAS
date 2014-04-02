@@ -1,0 +1,20 @@
+{% extends 'navbar.html' %}
+{% set this_page_id='login' %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div id="loginform" class="col-sm-6">
+            <h2>Please log in</h2>
+            <form action="{{ url_for('login') }}" method="POST" id="form-login">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" />
+                <br />
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" class="form-control" />
+                <br />
+                <input type="submit" class="btn btn-primary" value="Login" />
+            </form>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+{% endblock %}

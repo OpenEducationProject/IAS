@@ -1,0 +1,34 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li><a href="{{ url_for('question_dashboard') }}">Questions</a></li>
+        <li class="active">Create question</li>
+    </ul>
+    <div class="row" style="padding-bottom:40px;">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <h2>Create question</h2>
+            <form action="" method="post">
+                <label for="text">Question text</label>
+                <input id="text" name="text" placeholder="How much wood does a woodchuck chuck?" class="form-control" />
+                <br />
+                <label for="type">Type</label>
+                <select name="type" id="type" class="form-control">
+                    {% for i in types %}
+                        <option value="{{ types[i] }}"{% if i == "multiple choice" %} selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <br />
+                <label for="answer_choices">Answer choices (comma-seperated, only required for multiple choice)</label>
+                <input type="text" id="answer_choices" name="answer_choices" class="form-control" placeholder="apple,carrot,banana,potato" />
+                <br />
+                <label for="answer">Answer</label>
+                <input type="text" id="answer" name="answer" class="form-control" />
+                <br />
+                <input type="submit" class="btn btn-primary form-control" value="Create" />
+            </form>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+{% endblock %}

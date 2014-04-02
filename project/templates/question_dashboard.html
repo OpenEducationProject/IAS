@@ -1,0 +1,22 @@
+{% extends 'navbar.html' %}
+{% set this_page_id='question' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li class="active">Questions</li>
+    </ul>
+    <h2>Create new question</h2>
+    <a href="{{ url_for('make_question') }}">create new question</a><br />
+    <h2>Search for questions</h2>
+    <form method="post" action="{{ url_for('search_question_view') }}">
+        <div class="row">
+            <p>Searches are case-insensitive. % and _ can be used as wildcards, replacing the usual * and ?, respectively.</p>
+            <span class="col-sm-10">
+                <input name="key" placeholder="Search query" class="form-control" />
+            </span>
+            <span class="col-sm-2">
+                <input type="submit" value="Search" class="btn btn-primary" class="form-control" />
+            </span>
+        </div>
+    </form>
+{% endblock %}

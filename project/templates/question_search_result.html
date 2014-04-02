@@ -1,0 +1,47 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li><a href="{{ url_for('question_dashboard') }}">Questions</a></li>
+        <li class="active">Search results</li>
+    </ul>
+    <form method="post" action="">
+        <div class="row">
+            <span class="col-sm-10">
+                <input name="key" placeholder="Search query" class="form-control" />
+            </span>
+            <span class="col-sm-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </span>
+        </div>
+    </form>
+    <br />
+    <table class="table">
+        <tr>
+            <th width="30%">Question</th>
+            <th>Type</th>
+            <th>Answer choices</th>
+            <th>Answer</th>
+            <th>Tools</th>
+        </tr>
+        {% for q in result %}
+            <tr>
+                <td width="30%">{{ q.text }}</td>
+                <td>{{ types[q.type] }}</td>
+                <td>{{ q.answer_choices }}</td>
+                <td>{{ q.answer }}</td>
+                <td>
+                    {% if session.selected_test > -1 %}
+                        {% if not has_question(q.qid, session.selected_test) %}
+                            <a href="{{ url_for('add_to_assessment', qid=q.qid) }}">add to test</a> |
+                        {% else %}
+                            <a href="{{ url_for('rm_from_assessment', qid=q.qid) }}">remove from test</a> |
+                        {% endif %}
+                    {% endif %}
+                    <a href="{{ url_for('edit_question_view', qid=q.qid) }}">edit</a> |
+                    <a href="{{ url_for('delete_question_view', qid=q.qid) }}">delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

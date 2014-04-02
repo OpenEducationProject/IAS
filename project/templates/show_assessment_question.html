@@ -1,0 +1,38 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li><a href="{{ url_for('show_assessments') }}">Assessments</a></li>
+        <li>Take assessment: {{ a.title }}</li>
+        <li class="active">Question</li>
+    </ul>
+    <big>{{ q.text }}</big><br />
+    <form action="{{ url_for('assessment_answer_save', aid=a.aid, qid=q.qid) }}" method="POST" id="form">
+        {% if q.type[0] == 1 %}
+            {% for idx, i in enumerate(q["answer_choices"]) %}
+                <input type="radio" name="answer" id="q-{{ q.qid }}-{{ idx }}" value="{{ i }}" {% if response == i %} checked {% endif %}/>
+                <label for="q-{{ q.qid }}-{{ idx }}" style="font-weight:300;width:90%;">{{ i }}</label>
+                <br />
+            {% endfor %}
+        {% elif q.type[0] == 2 %}
+            Response: <input type="text" name="answer" class="form-control" {% if response != None %}value="{{ response }}" {% endif %}/>
+            <br />
+        {% endif %}
+        <input type="hidden" name="proposed_next" id="next" value="{{ qn }}" />
+    </form>
+    <div class="row">
+        <div class="col-sm-1">
+            {% if qp != None %}
+                <a href="#" onclick="$('#next').val({{ qp }});$('#form')[0].submit();" class="btn btn-primary">&lt; Previous</a>
+            {% endif %}
+        </div>
+        <div class="col-sm-10" style="text-align:center;">
+        </div>
+        <div class="col-sm-1">
+            {% if qn != None %}
+                <a href="#" onclick="$('#next').val({{ qn }});$('#form')[0].submit();" class="btn btn-primary">Next &gt;</a>
+            {% else %}
+                <a href="#" onclick="$('#next').val('done');$('#form')[0].submit();" class="btn btn-primary">Finish Test</a>
+            {% endif %}
+        </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li><a href="{{ url_for('show_assessments') }}">Assessments</a></li>
+        <li class="active">Analytics for {{ a.title }}</li>
+    </ul>
+    <h2>Analytics</h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Test information</h3>
+            <ul class="list-group">
+                <li class="list-group-item">Title is <strong>{{ a.title }}</strong></li>
+                <li class="list-group-item">Taken by class <strong>{{ group_name(a.gid) }}</strong></li>
+                <li class="list-group-item">Students had a maximum of <strong>{{ a.max_attempts }}</strong> attempts</li>
+                <li class="list-group-item"><strong>{{ n_students }}</strong> students took this assessment</li>
+                <li class="list-group-item"><strong>{{ n_questions }}</strong> questions</li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <h3>Score statistics</h3>
+            <ul class="list-group">
+                <li class="list-group-item">The mean score was <strong>{{ mean }}</strong> points ({{ (mean/n_questions)*100 }}%)</li>
+                <li class="list-group-item">The median score was <strong>{{ median }}</strong> points ({{ (median/n_questions)*100 }}%)</li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <h3>Grades</h3>
+            <ul class="list-group">
+                {% for uid, score in grades %}
+                    <li class="list-group-item">
+                        {{ nameof(uid) }}
+                        <span class="pull-right">
+                            {{ (score / n_questions)*100 }}%
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

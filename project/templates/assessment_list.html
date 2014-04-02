@@ -1,0 +1,64 @@
+{% extends 'navbar.html' %}
+{% set this_page_id='assess_list' %}
+{% block content %}
+    <ul class="breadcrumb">
+        <li>IAS</li>
+        <li class="active">Assessments</li>
+    </ul>
+    {% if is_in_group(-1) or is_in_group(-2) %}
+        <a href="{{ url_for('make_assessment') }}">create assessment</a>
+    {% endif %}
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Mode</th>
+            <th>Time allowed</th>
+            <th>Attempts allowed</th>
+            <th>Tools</th>
+        </tr>
+        {% for a in assessments %}
+            <tr{% if a.aid == session["selected_test"] %} class="success"{% endif %}>
+                <td><span>{{ a.title }}</span></td>
+                <td>{{ group_name(a.gid) }}</td>
+                <td>{% if a.mode == 0 %}Test disabled{% elif a.mode == 1 %}Test available{% else %}Answers available{% endif %}</td>
+                <td>{{ a.time/60 }} minutes</td>
+                <td>
+                    {% if a.max_attempts > 0 %}
+                        {{ a.max_attempts }}
+                    {% else %}
+                        Unlimited
+                    {% endif %}
+                    ({{ attempts_used(session.uid, a.aid) }} used)
+                </td>
+                <td>
+                    {% if a.mode == 1 or is_in_group(-2) or is_in_group(-1) %}
+                        <a href="{{ url_for('take_assessment', aid=a.aid) }}">take</a>
+                    {% endif %}
+                    {% if is_in_group(-2) or is_in_group(-1) %}
+                        |
+                        {% if a.aid != session["selected_test"] %}
+                            <a href="{{ url_for('select_assessment', aid=a.aid) }}">select</a> |
+                        {% else %}
+                            <a href="{{ url_for('unselect_assessment') }}">unselect</a> |
+                        {% endif %}
+                        <a href="{{ url_for('delete_assessment_view', aid=a.aid) }}">delete</a> |
+                        <a href="{{ url_for('edit_assessment_properties', aid=a.aid) }}">edit</a> |
+                        <a href="{{ url_for('assessment_questions', aid=a.aid) }}">questions</a> |
+                        <a href="{{ url_for('assessment_analytics', aid=a.aid) }}">analytics</a> |
+                        {% if a.mode == 0 %}
+                            <a href="{{ url_for('enable_assessment_view', aid=a.aid) }}">enable</a>
+                            {% elif a.mode != 0 %}
+                            <a href="{{ url_for('disable_assessment_view', aid=a.aid) }}">disable</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr style="border-top:none;">
+                <td colspan="6" style="border-top:none;">
+                    <em>Directions:</em> {{ a.description }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

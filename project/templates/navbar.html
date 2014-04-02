@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% set navbar = [
+(url_for('index'), 'home', 'Home', not session.uid),
+(url_for('login'), 'login', 'Login', not session.uid),
+(url_for('logout'), '', 'Logout', session.uid),
+(url_for('show_assessments'), 'assess_list', 'Assessments', session.uid),
+(url_for('question_dashboard'), 'question', 'Questions', is_in_group(-1) or is_in_group(-2))
+] -%}
+
+{% set this_page_id = this_page_id | default('home') %}
+
+{% block head %}
+    <style type="text/css">
+        body { padding-top: 60px; }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">IAS</a>
+                <ul class="nav navbar-nav">
+                    {% for path, page_id, display_text, display_condition in navbar %}
+                        {% if display_condition %}
+                            <li{% if page_id == this_page_id %} class="active"{% endif %}>
+                                <a href="{{ path }}">{{ display_text }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div id="alerts-container">
+                {% block alerts %}{% endblock %}
+                {% for cat, msg in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{ cat }} alert-flashed">{{ msg|safe }}</div>
+                {% endfor %}
+            </div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
